@@ -1,4 +1,6 @@
 const { Types: { ObjectId } } = require('mongoose');
+const path = require('path');
+
 const APIError = require('./APIErrors');
 const { UNAUTHORIZED } = require('./http-status');
 
@@ -31,3 +33,12 @@ exports.JwtError = (error) => {
   JwtError(msg);
   return new APIError(obj);
 };
+
+exports.UploadFile = (files) => new Promise((resolve, reject) => {
+  files.mv(`${path.join(__dirname, '../public', files.name)}`, (err) => {
+    if (err) {
+      reject(new APIError({ status: 500, message: 'Error while uploading file' }));
+    }
+    resolve(files.name);
+  });
+});

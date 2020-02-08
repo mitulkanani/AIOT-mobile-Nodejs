@@ -7,6 +7,6 @@ exports.CreateProject = async (data) => {
 };
 
 exports.GetProjects = async () => {
-  const prjs = await Project.find({});
+  const prjs = await Project.find({}).populate('user', '_id email');
   return prjs.map((p) => p.transform());
 };
